@@ -1,0 +1,4 @@
+pyTelegramBotAPI>=4.15.0
+google-api-python-client>=2.110.0
+google-generativeai>=0.4.0
+flask>=3.0.0
