@@ -166,7 +166,7 @@ def get_hot_videos_from_playlist(
 
 def generate_ai_video_ideas(keyword, competitor_titles):
   try:
-    model = genai.GenerativeModel("gemini-2.5-flash")
+    model = genai.GenerativeModel("gemini-3.8-flash")
     titles_text = "\n".join(f"- {t}" for t in competitor_titles[:10])
     prompt = (
         f"من یک کانال یوتیوب در حوزه '{keyword}' دارم. عناوین ویدیوهای پربازدید"
