@@ -296,18 +296,30 @@ def run_competitor_analysis(chat_id, keyword, time_filter):
 
   bot.send_message(chat_id, comparison_report, parse_mode="Markdown")
 
-  sent_ai_msg = bot.send_message(
-      chat_id, "🤖 **هوش مصنوعی در حال تحلیل عناوین و ساخت ایده‌ها است...**"
-  )
-  competitor_titles = [vid["title"] for vid in all_hot_videos]
-  ai_suggestions = generate_ai_video_ideas(keyword, competitor_titles)
+# پیشنهاد هوش مصنوعی (همراه با مدیریت خطا و سرعت بیشتر)
+    sent_ai_msg = bot.send_message(
+        chat_id, "🤖 **هوش مصنوعی در حال تحلیل عناوین و ساخت ایده‌ها است...**"
+    )
 
-  bot.edit_message_text(
-      f"💡 **پیشنهادهای طلایی هوش مصنوعی:**\n\n{ai_suggestions}",
-      chat_id=chat_id,
-      message_id=sent_ai_msg.message_id,
-      parse_mode="Markdown",
-  )
+    try:
+      # ارسال ۵ عنوان برتر برای پاسخ‌دهی سریع‌تر و جلوگیری از گیر کردن
+      competitor_titles = [vid["title"] for vid in all_hot_videos[:5]]
+      ai_suggestions = generate_ai_video_ideas(keyword, competitor_titles)
+
+      bot.edit_message_text(
+          f"💡 **پیشنهادهای طلایی هوش مصنوعی:**\n\n{ai_suggestions}",
+          chat_id=chat_id,
+          message_id=sent_ai_msg.message_id,
+          parse_mode="Markdown",
+      )
+    except Exception as ai_err:
+      print(f"خطا در بخش هوش مصنوعی: {ai_err}")
+      bot.edit_message_text(
+          "⚠️ متأسفانه در این لحظه پاسخی از هوش مصنوعی دریافت نشد، اما"
+          " ویدیوهای برتر رقبا در ادامه آورده شده‌اند 👇",
+          chat_id=chat_id,
+          message_id=sent_ai_msg.message_id,
+      )
 
   bot.send_message(chat_id, f"🔥 **۵ ویدیوی داغ برتر رقبا:**", parse_mode="Markdown")
 
